@@ -853,6 +853,12 @@ void axp192Init()
 
     }
 
+    PMU->enableBattDetection();
+    PMU->enableVbusVoltageMeasure();
+    PMU->enableBattVoltageMeasure();
+    PMU->enableSystemVoltageMeasure();
+
+
     // Flash the Blue LED until our first packet is transmitted
     PMU->setChargingLedMode(XPOWERS_CHG_LED_BLINK_4HZ);
     // PMU->setChargingLedMode(XPOWERS_CHG_LED_OFF);
@@ -1186,7 +1192,7 @@ void update_activity()
     }
 
     uint32_t now = millis();
-    float bat_volts = PMU->getBattVoltage() / 1000;
+    float bat_volts = PMU->getBattVoltage() / 1000.0;
     // float charge_ma = axp.getBattChargeCurrent();
 
     if (pmu_found && \
@@ -1195,10 +1201,10 @@ void update_activity()
             /*&& \
             charge_ma < 99.0*/
        ) {
-        Serial.println("Low Battery OFF");
-        screen_print("\nLow Battery OFF\n");
-        delay(4999);  // Give some time to read the screen
-        clean_shutdown();
+            Serial.println("Low Battery OFF");
+            screen_print("\nLow Battery OFF\n");
+            delay(4999);  // Give some time to read the screen
+            clean_shutdown();
     }
 
     // Here we just woke from a GPS-off long sleep.
